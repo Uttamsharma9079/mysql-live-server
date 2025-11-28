@@ -11,7 +11,6 @@ pipeline {
     stages {
         stage('Checkout Repository') {
             steps {
-                // Checkout code using GitHub credentials
                 git url: "${REPO_URL}", branch: "${BRANCH}", credentialsId: 'github-credentials-id'
             }
         }
@@ -19,9 +18,9 @@ pipeline {
         stage('Add/Commit SQL File') {
             steps {
                 script {
-                    // Ensure your .sql file is here. Adjust the path if needed
-                    sh 'git add database.sql'
-                    sh 'git commit -m "Add/update MySQL file" || echo "No changes to commit"'
+                    // On Windows, use bat instead of sh
+                    bat 'git add database.sql'
+                    bat 'git commit -m "Add/update MySQL file" || echo No changes to commit'
                 }
             }
         }
@@ -29,12 +28,9 @@ pipeline {
         stage('Push Changes') {
             steps {
                 script {
-                    // Push changes to GitHub
-                    sh """
-                    git config user.name "Jenkins"
-                    git config user.email "jenkins@example.com"
-                    git push origin ${BRANCH}
-                    """
+                    bat 'git config user.name "Jenkins"'
+                    bat 'git config user.email "jenkins@example.com"'
+                    bat 'git push origin ${BRANCH}'
                 }
             }
         }
@@ -46,3 +42,6 @@ pipeline {
         }
         failure {
             echo 'Something went wrong. Check the Jenkins logs.'
+        }
+    }
+}
