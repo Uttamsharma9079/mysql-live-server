@@ -2,11 +2,16 @@ pipeline {
     agent any
 
     environment {
-        // GitHub credentials stored in Jenkins (Username + Personal Access Token)
-        GITHUB_CREDS = credentials('github-credentials-id') // replace with your Jenkins GitHub credentials ID
-        REPO_URL = 'https://github.com/Uttamsharma9079/mysql-live-server.git'
-        BRANCH = 'main'  // your branch
+    GITHUB_CREDS = credentials('my-github-creds') // replace with your actual credential ID
+}
+
+stages {
+    stage('Checkout Repository') {
+        steps {
+            git url: "${REPO_URL}", branch: "${BRANCH}", credentialsId: 'my-github-creds'
+        }
     }
+}
 
     stages {
         stage('Checkout Repository') {
