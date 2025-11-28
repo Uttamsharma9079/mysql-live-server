@@ -2,17 +2,17 @@ pipeline {
     agent any
 
     environment {
-        // Azure DevOps credentials stored in Jenkins (Username+PAT)
-        AZURE_CREDS = credentials('azure-pat') // replace with your Jenkins credentials ID
-        REPO_URL = 'https://dev.azure.com/azureclasses70989/project%20dev/_git/project%20dev'
-        BRANCH = 'master'  // your branch
+        // GitHub credentials stored in Jenkins (Username + Personal Access Token)
+        GITHUB_CREDS = credentials('github-credentials-id') // replace with your Jenkins GitHub credentials ID
+        REPO_URL = 'https://github.com/Uttamsharma9079/mysql-live-server.git'
+        BRANCH = 'main'  // your branch
     }
 
     stages {
         stage('Checkout Repository') {
             steps {
-                // Checkout code using PAT credentials
-                git url: "${REPO_URL}", branch: "${BRANCH}", credentialsId: 'azure-pat'
+                // Checkout code using GitHub credentials
+                git url: "${REPO_URL}", branch: "${BRANCH}", credentialsId: 'github-credentials-id'
             }
         }
 
@@ -29,7 +29,7 @@ pipeline {
         stage('Push Changes') {
             steps {
                 script {
-                    // Push changes to Azure Repo
+                    // Push changes to GitHub
                     sh """
                     git config user.name "Jenkins"
                     git config user.email "jenkins@example.com"
@@ -42,10 +42,7 @@ pipeline {
 
     post {
         success {
-            echo 'MySQL file successfully pushed to Azure Repos!'
+            echo 'MySQL file successfully pushed to GitHub!'
         }
         failure {
             echo 'Something went wrong. Check the Jenkins logs.'
-        }
-    }
-}
